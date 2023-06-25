@@ -3,13 +3,14 @@ import type { AppProps } from "next/app";
 import { MedusaProvider } from "medusa-react";
 import { QueryClient } from "@tanstack/react-query";
 import React from "react";
-const queryClient = new QueryClient();
+import { API_URL, queryClient } from "@/lib/config";
+
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <MedusaProvider
       queryClientProviderProps={{ client: queryClient }}
-      baseUrl="http://localhost:9000"
+      baseUrl={API_URL}
     >
       <Component {...pageProps} />
     </MedusaProvider>
