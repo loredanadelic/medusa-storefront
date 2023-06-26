@@ -4,7 +4,7 @@ import { MedusaProvider } from "medusa-react";
 import { QueryClient } from "@tanstack/react-query";
 import React from "react";
 import { API_URL, queryClient } from "@/lib/config";
-
+import Layout from "@/modules/layout/templates";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -12,7 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
       queryClientProviderProps={{ client: queryClient }}
       baseUrl={API_URL}
     >
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </MedusaProvider>
   );
 }
