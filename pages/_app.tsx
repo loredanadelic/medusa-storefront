@@ -13,7 +13,9 @@ export default function App({ Component, pageProps }: AppProps) {
       baseUrl={API_URL}
     >
       <Layout>
-        <Component {...pageProps} />
+        <div className=" min-h-screen items-center justify-between p-4 bg-white">
+          <Component {...pageProps} />
+        </div>
       </Layout>
     </MedusaProvider>
   );
