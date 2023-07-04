@@ -3,6 +3,8 @@ import { medusaClient } from "@/lib/config";
 import Product from "@/modules/products/components/product";
 import { GetStaticProps } from "next";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import FilterSidebar from "@/modules/products/components/filter-sidebar";
 
 const fetchProducts = async () => {
   return await medusaClient.products.list().then(({ products }) => products);
@@ -14,6 +16,9 @@ const ProductsPage = () => {
     () => fetchProducts(),
     {}
   );
+
+  const [sidebar, setSidebar] = useState(false);
+
   if (isError) {
     return (
       <div>
@@ -28,13 +33,29 @@ const ProductsPage = () => {
       </div>
     );
   }
+
   if (isSuccess) {
     return (
-      <ul className="grid gap-3 grid-cols-4">
-        {data.map((product: PricedProduct) => {
-          return <Product product={product} key={product.id} />;
-        })}
-      </ul>
+      <div>
+        <div className="w-[100%] flex justify-end pb-2">
+          <button
+            className="border-2 px-2 py-1 font-medium"
+            onClick={() => setSidebar((prev) => !prev)}
+          >
+            FILTERS
+          </button>
+        </div>
+
+        <FilterSidebar setSidebar={setSidebar} sidebar={sidebar}>
+          {}
+        </FilterSidebar>
+
+        <ul className="grid gap-3 grid-cols-4">
+          {data.map((product: PricedProduct) => {
+            return <Product product={product} key={product.id} />;
+          })}
+        </ul>
+      </div>
     );
   }
 };
