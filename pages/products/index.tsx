@@ -25,7 +25,7 @@ const ProductsPage = () => {
   const collections =
     useQuery([`get_collections`], () => fetchCollections(), {}).data || [];
   const [sidebar, setSidebar] = useState(false);
-  const [productsList, setProductsList] = useState<PricedProduct[]>([]);
+  const [productsList, setProductsList] = useState<PricedProduct[]>();
   const filterProducts = async (filter: FilterList) => {
     if (filter.collection_id.length < 1 && data) {
       setProductsList(data);
@@ -74,7 +74,7 @@ const ProductsPage = () => {
         />
 
         <ul className="grid gap-3 grid-cols-4">
-          {productsList.length > 0
+          {productsList !== undefined
             ? productsList.map((product: PricedProduct) => {
                 return <Product product={product} key={product.id} />;
               })
