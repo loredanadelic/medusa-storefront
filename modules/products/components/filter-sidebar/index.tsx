@@ -1,36 +1,58 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import CloseButton from "@/modules/common/components/close-button";
+import { Dispatch, SetStateAction, useState } from "react";
+import { ProductCollection } from "@medusajs/medusa/dist/models/product-collection";
+import Collections from "./filter/collections";
+import { FilterList } from "@/types";
 
 type FilterSidebarProps = {
   setSidebar: Dispatch<SetStateAction<boolean>>;
-  children: ReactNode;
-  sidebar: boolean
+  sidebar: boolean;
+  collections: ProductCollection[];
+  filterProducts: (values: FilterList) => void;
 };
-const FilterSidebar: React.FC<FilterSidebarProps> = ({ setSidebar, children, sidebar }) => {
-    const active=()=>{
-       if(sidebar){
-        return {display:''}
-       }
-       else{
-        return {display:'none'}
-       }
+const FilterSidebar: React.FC<FilterSidebarProps> = ({
+  setSidebar,
+  sidebar,
+  collections,
+  filterProducts,
+}) => {
+  const [filter, setFilter] = useState<FilterList>({ collection_id: [] });
+  const active = () => {
+    if (sidebar) {
+      return { display: "" };
+    } else {
+      return { display: "none" };
     }
+  };
   return (
-    <div className="h-screen w-[25%] fixed z-10 bg-white border-2 border-gray-400 right-0 top-0" style={active()}>
-        <div className="flex justify-end p-2">
-      <svg
-        className="filters-panel__button-close-icon hover:cursor-pointer "
-        aria-hidden="true"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="inherit"
-        stroke="inherit"
-        onClick={() => setSidebar((prev) => !prev)}
-      >
-        <path d="M12 12.707l6.846 6.846.708-.707L12.707 12l6.847-6.846-.707-.708L12 11.293 5.154 4.446l-.707.708L11.293 12l-6.846 6.846.707.707L12 12.707z"></path>
-      </svg></div>
-      <div className="m-[2%] mt-[10%]">{children}</div>
+    <div
+      className="h-screen w-[25%] fixed z-10 bg-white border-2 border-gray-400 right-0 top-0"
+      style={active()}
+    >
+      <CloseButton close={setSidebar} />
+      <div className="m-[2%] mt-[10%]">
+        <form>
+          <div className="w-[100%] h-[100%] text-center">
+            <h1 className="font-semibold text-lg m-auto">Collection</h1>
+            <Collections
+              collections={collections}
+              setFilter={setFilter}
+              filter={filter}
+            />
+            <div className="w-[100%] m-auto">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  filterProducts(filter);
+                }}
+                className="border-2 px-2 py-1 font-medium m-auto"
+              >
+                Filter
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
