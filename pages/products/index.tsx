@@ -3,9 +3,10 @@ import { medusaClient } from "@/lib/config";
 import Product from "@/modules/products/components/product";
 import { GetStaticProps } from "next";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FilterSidebar from "@/modules/products/components/filter-sidebar";
 import { FilterList } from "@/types";
+import Loader from "@/modules/common/components/loader";
 
 const fetchProducts = async () => {
   return await medusaClient.products.list().then(({ products }) => products);
@@ -49,7 +50,7 @@ const ProductsPage = () => {
   if (isLoading || !data) {
     return (
       <div>
-        <p>Loading</p>
+       <Loader />
       </div>
     );
   }

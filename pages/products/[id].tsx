@@ -4,6 +4,7 @@ import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetStaticPaths, GetStaticProps } from "next";
 import ProductDetailsTemplate from "@/modules/products/templates/product-page";
 import { getIds } from "@/lib/util/produc_id";
+import Loader from "@/modules/common/components/loader";
 const fetchProduct = async (product_id: string) => {
   return await medusaClient.products
     .retrieve(product_id)
@@ -22,7 +23,7 @@ const ProductDetailsPage = () => {
 
   if (isLoading || !data) {
     <div>
-      <p>Loading</p>
+      <Loader />
     </div>;
   }
   if (isError) {
