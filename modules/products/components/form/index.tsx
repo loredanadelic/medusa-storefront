@@ -1,28 +1,100 @@
-import { PricedProduct } from "@medusajs/medusa/dist/types/pricing";
+import {
+  PricedProduct,
+  PricedVariant,
+} from "@medusajs/medusa/dist/types/pricing";
 import Select from "./select";
 import QuantitySelector from "./quantity";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FormatedValue, Option } from "@/types";
+
 type FormProps = {
   product: PricedProduct;
+};
+type ProductVariant = {
+  id: string;
 };
 
 const Form: React.FC<FormProps> = ({ product }) => {
   const [quantity, setQuantity] = useState<number>(0);
-  const [color, setColor]=useState<string>('')
-  const [size, setSize]=useState<string>('')
+  const [color, setColor] = useState<FormatedValue>();
+  const [size, setSize] = useState<FormatedValue>();
+  const [variantId, setVariantId] = useState<ProductVariant>();
+  const [prodVariant, setProdVariant] = useState<PricedVariant>();
   const options = product.options || [];
   const sizes = options.values().next().value.values;
   const colors = options[1]?.values || [{ value: "One color" }];
+
+  useEffect(() => {
+    if (variantId) {
+      const index = product.variants.findIndex((prod) => {
+        return prod.id === variantId.id;
+      });
+      setProdVariant(product.variants[index]);
+    } else {
+      setProdVariant(undefined);
+      setVariantId(undefined);
+    }
+  }, [variantId?.id, color?.x, size?.x]);
+  useEffect(() => {
+    sizes[0].value == "One Size" &&
+      setSize(() => ({
+        x: "One Size",
+        variant_ids: sizes[0].variant_id,
+        visability: true,
+      }));
+    if (colors[0].value === "One color") {
+      const col: string[] = [];
+      sizes.forEach((s: Option) => col.push(s.variant_id));
+      setColor(() => ({ x: "One color", variant_ids: col, visability: true }));
+    }
+    if (colors[0].value === "One color" && sizes[0].value === "One Size") {
+      const index = product.variants.findIndex((prod) => {
+        return prod.id === sizes[0].variant_id;
+      });
+      setProdVariant(() => {
+        return product.variants[index];
+      });
+    }
+  }, []);
 
   return (
     <div>
       <form>
         <div className="grid  grid-cols-1 w-[100%]">
-          <Select values={sizes} />
-          <Select values={colors} />
+          {sizes[0].value !== "One Size" && (
+            <Select
+              values={sizes}
+              pickValue={setSize}
+              pickedValue={color}
+              setVariantId={setVariantId}
+              setQuantity={setQuantity}
+            />
+          )}
+          {colors[0].value !== "One color" && (
+            <Select
+              values={colors}
+              pickValue={setColor}
+              pickedValue={size}
+              setVariantId={setVariantId}
+              setQuantity={setQuantity}
+            />
+          )}
         </div>
-        <QuantitySelector value={quantity} setValue={setQuantity} />
-        <button type="submit" className="w-[100%] bg-slate-900 mt-5 h-10 text-white text-lg">ADD TO CART <span className="text-xl ml-2">+</span></button>
+        <QuantitySelector
+          value={quantity}
+          setValue={setQuantity}
+          prodVariant={prodVariant}
+        />
+        <button
+          type="submit"
+          onClick={(e) => {
+            e.preventDefault();
+            setQuantity(0);
+          }}
+          className="w-[100%] bg-slate-900 mt-5 h-10 text-white text-lg"
+        >
+          ADD TO CART <span className="text-xl ml-2">+</span>
+        </button>
       </form>
     </div>
   );
