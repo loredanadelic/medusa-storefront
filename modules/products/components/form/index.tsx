@@ -34,8 +34,6 @@ const Form: React.FC<FormProps> = ({ product }) => {
       setProdVariant(undefined);
       setVariantId(undefined);
     }
-  }, [variantId?.id, color?.x, size?.x]);
-  useEffect(() => {
     sizes[0].value == "One Size" &&
       setSize(() => ({
         x: "One Size",
@@ -47,7 +45,7 @@ const Form: React.FC<FormProps> = ({ product }) => {
       sizes.forEach((s: Option) => col.push(s.variant_id));
       setColor(() => ({ x: "One color", variant_ids: col, visability: true }));
     }
-    if (colors[0].value === "One color" && sizes[0].value === "One Size") {
+    if (colors[0].value ==='One color'  && sizes[0].value === "One Size") {
       const index = product.variants.findIndex((prod) => {
         return prod.id === sizes[0].variant_id;
       });
@@ -55,7 +53,7 @@ const Form: React.FC<FormProps> = ({ product }) => {
         return product.variants[index];
       });
     }
-  }, []);
+  }, [variantId?.id, color?.x, size?.x]);
 
   return (
     <div>
