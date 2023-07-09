@@ -1,5 +1,5 @@
 import { PricedProduct } from "@medusajs/medusa/dist/types/pricing";
-import Thumbnail from "../thumbnail";
+import Thumbnail from "../images/thumbnail";
 import { getPrice } from "@/lib/util/product";
 import { redirect } from "next/dist/server/api-utils";
 import Link from "next/link";
