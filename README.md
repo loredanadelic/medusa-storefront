@@ -1,38 +1,12 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Description of the project
 
-## Getting Started
+In this project, I created a frontend application for the medusa server. There is a project page with a list of all products, which you can filter by collections. After clicking on a specific product you will be sent to the product details page. On that page, you can see options for specific products, such as size or color, and you can choose the quantity of different product variants.
 
-First, run the development server:
+It's hard to say exactly how long it took to complete this project, but I spent a few hours after work for about 10 days.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+First, I created a product detail page with possible options in the form, but this was not functional for selecting a specific product variant. So for me it was the most challenging and most fun implementation, because I had to come up with an idea to solve that problem.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+When I started building this app, I decided to make a layout with a header. I then created a product page where I implemented a useEffect to retrieve the product list, but later changed that with Nextjs features to fetch data from the server. 
+I already explained the way product details page was built. 
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+There were some considerations when implementing the filter. I wasn't sure if I should send the user to a new page when they click on a specific collection or I should implement it with a multi-select options and keep them on the current page.
