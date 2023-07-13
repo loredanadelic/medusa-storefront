@@ -21,3 +21,11 @@ export type FormatedValue = {
     option_id: string;
     variant_id: string;
   };
+
+  export type Item = {
+    id: string;
+    price: number;
+    name: string;
+    image: string | undefined | null;
+    variant: string | undefined;
+  };

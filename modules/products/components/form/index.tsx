@@ -6,7 +6,9 @@ import Select from "./select";
 import QuantitySelector from "./quantity";
 import { useEffect, useState } from "react";
 import { FormatedValue, Option } from "@/types";
-
+import { useCart } from "react-use-cart";
+import { getPrice } from "@/lib/util/product";
+import {Item} from '../../../../types'
 type FormProps = {
   product: PricedProduct;
 };
@@ -20,6 +22,7 @@ const Form: React.FC<FormProps> = ({ product }) => {
   const [size, setSize] = useState<FormatedValue>();
   const [variantId, setVariantId] = useState<ProductVariant>();
   const [prodVariant, setProdVariant] = useState<PricedVariant>();
+  const { addItem } = useCart();
   const options = product.options || [];
   const sizes = options.values().next().value.values;
   const colors = options[1]?.values || [{ value: "One color" }];
@@ -45,7 +48,7 @@ const Form: React.FC<FormProps> = ({ product }) => {
       sizes.forEach((s: Option) => col.push(s.variant_id));
       setColor(() => ({ x: "One color", variant_ids: col, visability: true }));
     }
-    if (colors[0].value ==='One color'  && sizes[0].value === "One Size") {
+    if (colors[0].value === "One color" && sizes[0].value === "One Size") {
       const index = product.variants.findIndex((prod) => {
         return prod.id === sizes[0].variant_id;
       });
@@ -55,6 +58,26 @@ const Form: React.FC<FormProps> = ({ product }) => {
     }
   }, [variantId?.id, color?.x, size?.x]);
 
+  const handleAdd = (e: any) => {
+    e.preventDefault();
+    if (prodVariant && quantity > 0) {
+      const newItem: Item = {
+        id: prodVariant.id || "",
+        price: getPrice(product).price,
+        image: product.thumbnail,
+        name: product.title || "Product",
+        variant: prodVariant.title,
+      };
+    
+      addItem(newItem, quantity);
+      window.alert('Item added to cart')
+      setQuantity(0);
+    }
+    else{
+      window.alert('You need to select required values')
+    }
+
+  };
   return (
     <div>
       <form>
@@ -86,8 +109,7 @@ const Form: React.FC<FormProps> = ({ product }) => {
         <button
           type="submit"
           onClick={(e) => {
-            e.preventDefault();
-            setQuantity(0);
+            handleAdd(e);
           }}
           className="w-[100%] bg-slate-900 mt-5 h-10 text-white text-lg"
         >

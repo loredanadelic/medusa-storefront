@@ -21,6 +21,7 @@ const ProductDetailsPage = () => {
     { enabled: id.length > 0 }
   );
 
+
   if (isLoading || !data) {
     <div>
       <Loader />
